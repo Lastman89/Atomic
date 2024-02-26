@@ -16,7 +16,6 @@ public class Main {
         AtomicInteger Three = new AtomicInteger();
         AtomicInteger Four = new AtomicInteger();
         AtomicInteger Five = new AtomicInteger();
-        System.out.println(Arrays.toString(texts));
         // Создаём пул потоков по доступному количеству ядер
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
