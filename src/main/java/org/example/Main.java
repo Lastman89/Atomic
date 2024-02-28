@@ -1,89 +1,70 @@
 package org.example;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         Random random = new Random();
-        String[] texts = new String[10000];
+        String[] texts = new String[100];
         for (int i = 0; i < texts.length; i++) {
             texts[i] = generateText("abc", 3 + random.nextInt(3));
         }
-        int Three = 0;
-        int Four = 0;
-        int Five = 0;
-        System.out.println(Arrays.toString(texts));
-
+        int three = 0;
+        int four = 0;
+        int five = 0;
 
         for (int i = 0; i < texts.length; i++) {
-            AtomicInteger count = new AtomicInteger();
+            AtomicInteger countFirst = new AtomicInteger();
             AtomicInteger countSecond = new AtomicInteger();
             AtomicInteger countThree = new AtomicInteger();
             int counterI = i;
 
-            for (int j = 0; j < texts[i].length(); j++) {
-                //ищем слово в котором все символы одинаковы
-                int counterJ = j;
-                Thread treadFirst = new Thread(() -> {
-                            if (texts[counterI].charAt(counterJ) == texts[counterI].charAt((texts[counterI].length() - 1))) {
-                                count.getAndIncrement();
 
-                            }
-                        }
-                        );
-                //ищем полиндромы
-                Thread treadSecond = new Thread(() -> {
-                    if (texts[counterI].charAt(counterJ) == texts[counterI].charAt((texts[counterI].length() - 1) - counterJ)) {
-                        countThree.getAndIncrement();
-                        if (((counterJ == ((texts[counterI].length() - 1) - counterJ) && (texts[counterI].length() - 1) % 2 == 0) || (counterJ == ((texts[counterI].length()) - counterJ) && (texts[counterI].length() - 1) % 2 != 0))
-                                && texts[counterI].charAt(counterJ) == texts[counterI].charAt((texts[counterI].length() - 1))) {
-                            countThree.getAndDecrement();
-                        }
-
-                    }
-                }
-                );
-                //ищем слово где буквы в порядке возрастания
-                Thread treadThree = new Thread(() -> {
-                    if (counterJ < texts[counterI].length() - 1) {
-                        if (texts[counterI].charAt(counterJ) <= texts[counterI].charAt(counterJ + 1)) {
-                            countSecond.getAndIncrement();
-                        }
-                    }
-                }
-                );
-                treadFirst.start();
-                treadSecond.start();
-                treadThree.start();
-
-                treadFirst.join();
-                treadSecond.join();
-                treadThree.join();
+            Thread threadFirst = new Thread(() -> {
+                CheckName count = new CheckName();
+                countFirst.set(count.counter(texts[counterI]));
 
             }
+            );
+            Thread threadSecond = new Thread(() -> {
+                CheckName count = new CheckName();
+                countSecond.set(count.counterPolindrom(texts[counterI]));
+            }
+            );
 
-            if (texts[i].length() == count.get() || texts[i].length() - 1 == countSecond.get() || texts[i].length()  == countThree.get()) {
+            Thread threadThree = new Thread(() -> {
+                CheckName count = new CheckName();
+                countThree.set(count.counterIncreas(texts[counterI]));
+            }
+            );
+            threadFirst.start();
+            threadSecond.start();
+            threadThree.start();
+
+            threadFirst.join();
+            threadSecond.join();
+            threadThree.join();
+
+            if (texts[i].length() == countFirst.get() || texts[i].length() == countSecond.get() || texts[i].length() - 1 == countThree.get()) {
                 switch (texts[i].length()) {
                     case 3:
-                        Three++;
+                        three++;
                         break;
                     case 4:
-                        Four++;
+                        four++;
                         break;
                     case 5:
-                        Five++;
+                        five++;
                         break;
                 }
             }
         }
 
-        System.out.println("Красивых слов с длиной 3: " + Three + " шт.");
-        System.out.println("Красивых слов с длиной 4: " + Four + " шт.");
-        System.out.println("Красивых слов с длиной 5: " + Five + " шт.");
+        System.out.println("Красивых слов с длиной 3: " + three + " шт.");
+        System.out.println("Красивых слов с длиной 4: " + four + " шт.");
+        System.out.println("Красивых слов с длиной 5: " + five + " шт.");
 
     }
 
