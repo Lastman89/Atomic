@@ -14,6 +14,7 @@ public class Main {
         int three = 0;
         int four = 0;
         int five = 0;
+        CheckName count = new CheckName();
 
         for (int i = 0; i < texts.length; i++) {
             AtomicInteger countFirst = new AtomicInteger();
@@ -23,19 +24,16 @@ public class Main {
 
 
             Thread threadFirst = new Thread(() -> {
-                CheckName count = new CheckName();
                 countFirst.set(count.counter(texts[counterI]));
 
             }
             );
             Thread threadSecond = new Thread(() -> {
-                CheckName count = new CheckName();
                 countSecond.set(count.counterPolindrom(texts[counterI]));
             }
             );
 
             Thread threadThree = new Thread(() -> {
-                CheckName count = new CheckName();
                 countThree.set(count.counterIncreas(texts[counterI]));
             }
             );
