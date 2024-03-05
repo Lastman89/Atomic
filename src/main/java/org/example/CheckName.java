@@ -10,6 +10,7 @@ public class CheckName {
             if (nickName.charAt(j) == nickName.charAt((nickName.length() - 1))) {
                 count++;
             } else {
+                count = 0;
                 break;
             }
 
@@ -29,6 +30,7 @@ public class CheckName {
                 }
 
             } else {
+                countPoli = 0;
                 break;
             }
         }
@@ -40,11 +42,13 @@ public class CheckName {
         int increas = 0;
         for (int j = 0; j < nickName.length(); j++) {
             if (j < nickName.length() - 1) {
-                if (nickName.charAt(j) <= nickName.charAt(j + 1)) {
+                if (nickName.charAt(j) <= nickName.charAt(j + 1) && nickName.charAt(j) != nickName.charAt((nickName.length() - 1))) {
                     increas++;
                 }
-            } else {
-                break;
+                else {
+                    increas = 0;
+                    break;
+                }
             }
         }
         return increas;
